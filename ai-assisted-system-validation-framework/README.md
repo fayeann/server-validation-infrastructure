@@ -8,15 +8,18 @@
 
 This project is a **lab-scale experimental framework** designed to explore how modern hardware validation workflows can be structured in a modular and observable way, and how LLMs can be used for post-execution failure interpretation.
 
-It focuses on:
+> Note: The framework is intended for research and experimentation purposes only and is not tied to any production system or vendor-specific infrastructure.
 
-- Structured hardware validation workflows  
-- Deterministic execution of test scenarios  
-- Concurrent stress-based experiments  
-- Reboot-based stability validation  
-- Optional LLM-based post-run analysis  
+---
 
-The framework is intended for **research and experimentation purposes only** and is not tied to any production system or vendor-specific infrastructure.
+## Design Goals
+
+- Modular and extensible validation framework design
+- Deterministic execution for reproducibility
+- Clear separation between execution, observability, and analysis
+- Structured logging for traceable debugging workflows
+- Optional AI-assisted post-processing for experimental analysis only
+- Framework-agnostic hardware abstraction
 
 ---
 
@@ -44,33 +47,34 @@ Post-processing modules (logging, reporting, analysis) operate on per-iteration 
 
 ---
 
-## Design Goals
+## Validation Execution Model
 
-- Modular and extensible validation framework design  
-- Deterministic execution for reproducibility  
-- Clear separation between execution, observability, and analysis  
-- Structured logging for traceable debugging workflows  
-- Optional AI-assisted post-processing for experimental analysis only
-- Framework-agnostic hardware abstraction  
+### Validation Workflows
 
----
-
-## Validation Workflows
-
-### 1. System Initialization Checks
+#### 1. System Initialization Checks
 - Basic subsystem readiness checks 
 - Device discovery and enumeration validation 
 - Resource availability verification  
 
-### 2. Stress-Based Experiments
+#### 2. Stress-Based Experiments
 - CPU / memory / I/O stress execution  
 - Resource contention observation  
 - System stability evaluation under load  
 
-### 3. Reboot-Based Experiments
+#### 3. Reboot-Based Experiments
 - Repeated execution across reboot cycles  
 - Detection of intermittent or state-dependent behaviors  
 - Boot consistency verification
+
+
+### Execution Lifecycle
+
+Each test run follows a deterministic lifecycle:
+
+- Setup phase
+- Execution phase
+- Validation phase
+- Cleanup phase
 
 ---
 
@@ -146,28 +150,6 @@ This two-layer reporting model separates:
 
 ---
 
-## Execution Model
-
-Each test run follows a deterministic lifecycle:
-
-- Setup phase  
-- Execution phase  
-- Validation phase  
-- Cleanup phase  
-
----
-
-## Design Notes
-
-- Experiment-driven validation workflows  
-- Clear functional separation of modules  
-- Deterministic execution core  
-- Structured observability for debugging  
-- AI used only as optional post-processing layer
-- Hardware-agnostic abstraction layer
-
----
-
 ## Roadmap
 
 - [ ] observability integration
@@ -177,7 +159,7 @@ Each test run follows a deterministic lifecycle:
 
 ---
 
-Compliance Note
+## Compliance Note
 
 This project is an independent experimental framework created for research and educational purposes only.
 
