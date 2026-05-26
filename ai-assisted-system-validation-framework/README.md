@@ -24,6 +24,7 @@ The framework is intended for **research and experimentation purposes only** and
 
 The framework is organized into independent modules representing logical responsibilities in a hardware validation workflow.
 
+```
 testcase/     → Test scenario definition and execution flow orchestration  
 capability/   → Component-level hardware validation logic  
 api/          → Hardware abstraction layer
@@ -33,6 +34,13 @@ report/       → Structured result generation (JSON / HTML)
 analysis/     → Optional post-execution LLM-based interpretation  
 config/       → Declarative YAML-based test definitions  
 utils/        → Shared helper utilities  
+```
+
+**Layering Principle**: The framework enforces a strict layered architecture with downward-only dependencies to ensure deterministic execution and clear separation of concerns.
+
+**Layer Rule**: Each layer only calls downward — testcases → capabilities → APIs → tools.
+
+Post-processing modules (logging, reporting, analysis) operate on per-iteration execution artifacts and do not influence runtime control flow or subsequent test behavior.
 
 ---
 
@@ -54,32 +62,15 @@ utils/        → Shared helper utilities
 - Device discovery and enumeration validation 
 - Resource availability verification  
 
----
-
 ### 2. Stress-Based Experiments
 - CPU / memory / I/O stress execution  
 - Resource contention observation  
 - System stability evaluation under load  
 
----
-
 ### 3. Reboot-Based Experiments
 - Repeated execution across reboot cycles  
 - Detection of intermittent or state-dependent behaviors  
-- Boot consistency verification  
-
----
-
-## Observability Model
-
-All execution outputs are captured in structured form:
-
-- Raw execution logs  
-- Structured test results  
-- Per-run artifacts (JSON / HTML)  
-- Aggregated summaries across runs (JSON / HTML)  
-
-The system is designed so that test execution can be fully reconstructed from logs and artifacts.
+- Boot consistency verification
 
 ---
 
@@ -95,8 +86,6 @@ The framework includes an optional module for post-execution failure interpretat
 4. Send context to LLM API  
 5. Generate interpretive insights
 
----
-
 ### Reasoning Strategy (Experimental)
 The analysis module adopts a hierarchical reasoning strategy to enhance robustness:
 
@@ -104,7 +93,7 @@ The analysis module adopts a hierarchical reasoning strategy to enhance robustne
 2. If the primary output is insufficient or unavailable, a secondary LLM serves as fallback.
 3. If both LLM layers fail or are unreachable, a rule‑based heuristic system delivers minimal deterministic output.
 
-This ensures the system  produces  a consistent structured analysis results.
+This ensures the system produces consistent structured analysis results.
 
 The LLM is used for:
 
@@ -112,8 +101,6 @@ The LLM is used for:
 - Debugging suggestions  
 
 > This module operates strictly on post-execution data and does not influence runtime execution or control flow.
-
----
 
 ### Example Output (Illustrative)
 
@@ -125,22 +112,33 @@ The analysis suggests a potential instability in the NIC’s PCIe link training 
 P0 Critical Recommendations (Suggestions):
 - Replace NIC with a known-good unit
 - Inspect PCIe slot for physical damage or contamination
-
 (Full recommendations are provided in the iteration-level report output.)
 ```
 P0 recommendations in the Summary Report are intentionally limited to the most critical actions, while complete troubleshooting guidance remains available in Iteration Reports.
 
 ---
 
-## Output Structure
+## Observability & Output Model
 
-logs/
-- {test}_iteration_{N}.log      → Per-iteration raw log
-- {test}_iteration_{N}.json     → Structured validation + AI results
-- {test}_iteration_{N}.html     → Human-readable iteration report
-- {test}_summary.json           → Aggregated summary across iterations
-- {test}_summary.html           → Summary report with AI root cause 
-- {test}.log                    → Global execution trace 
+All execution outputs are captured in structured form:
+
+- Raw execution logs
+- Structured test results
+- Per-run artifacts (JSON / HTML)
+- Aggregated summaries across runs (JSON / HTML)
+
+The system is designed so that test execution can be fully reconstructed from logs and artifacts.
+
+All outputs are written to `framework/logs/`:
+
+|File                       |Description                         |
+|---------------------------|------------------------------------|
+|`{test}_iteration_{N}.log` |Per-iteration raw log               |
+|`{test}_iteration_{N}.json`|Structured validation + AI results  |
+|`{test}_iteration_{N}.html`|Human-readable iteration report     |
+|`{test}_summary.json`      |Aggregated summary across iterations|
+|`{test}_summary.html`      |Summary report with AI root cause   |
+|`{test}.log`               |Global execution trace              |
 
 This two-layer reporting model separates:
 - Iteration-level debugging
