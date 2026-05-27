@@ -1,14 +1,8 @@
 # AI-Assisted Server Validation Framework (Experimental)
 
-> A modular, lab-scale framework for exploring hardware validation workflows, observability-driven debugging, and optional LLM-assisted failure interpretation in server systems.
+A modular, lab-scale framework for exploring hardware validation workflows, observability-driven debugging, and optional LLM-assisted failure interpretation in server systems.
 
----
-
-## Overview
-
-This project is a **lab-scale experimental framework** designed to explore how modern hardware validation workflows can be structured in a modular and observable way, and how LLMs can be used for post-execution failure interpretation.
-
-> Note: The framework is intended for research and experimentation purposes only and is not tied to any production system or vendor-specific infrastructure.
+> Note: The framework is intended for **research and experimentation purposes only** and is not tied to any production system or vendor-specific infrastructure.
 
 ---
 
@@ -18,7 +12,7 @@ This project is a **lab-scale experimental framework** designed to explore how m
 - Deterministic execution for reproducibility
 - Clear separation between execution, observability, and analysis
 - Structured logging for traceable debugging workflows
-- Optional AI-assisted post-processing for experimental analysis only
+- Optional LLM-assisted post-processing for experimental analysis only
 - Framework-agnostic hardware abstraction
 
 ---
@@ -34,7 +28,7 @@ api/          → Hardware abstraction layer
 tool/         → Low-level execution utilities
 logging/      → Structured event logs and trace collection  
 report/       → Structured result generation (JSON / HTML)  
-analysis/     → Optional post-execution LLM-based interpretation  
+analysis/     → Optional post-execution LLM-assisted interpretation
 config/       → Declarative YAML-based test definitions  
 utils/        → Shared helper utilities  
 ```
@@ -78,7 +72,7 @@ Each test run follows a deterministic lifecycle:
 
 ---
 
-## LLM-Based Analysis (Experimental)
+## LLM-assisted Analysis (Experimental)
 
 The framework includes an optional module for post-execution failure interpretation using LLMs.
 
@@ -93,7 +87,7 @@ The framework includes an optional module for post-execution failure interpretat
 ### Reasoning Strategy (Experimental)
 The analysis module adopts a hierarchical reasoning strategy to enhance robustness:
 
-1. Primary LLM‑driven analysis is executed on structured logs.
+1. Primary LLM‑assisted analysis is executed on structured logs.
 2. If the primary output is insufficient or unavailable, a secondary LLM serves as fallback.
 3. If both LLM layers fail or are unreachable, a rule‑based heuristic system delivers minimal deterministic output.
 
@@ -109,11 +103,12 @@ The LLM is used for:
 ### Example Output (Illustrative)
 
 ```
-AI Root Cause (Hypothesis)
+**AI Root Cause (Hypothesis)**
 
 The analysis suggests a potential instability in the NIC’s PCIe link training process. The device appears unable to maintain a stable Gen4 link under repeated validation runs, with observed AER correctable errors indicating possible signal integrity degradation.
 
-P0 Critical Recommendations (Suggestions):
+**P0 Critical Recommendations (Suggestions)**
+
 - Replace NIC with a known-good unit
 - Inspect PCIe slot for physical damage or contamination
 (Full recommendations are provided in the iteration-level report output.)
@@ -168,9 +163,3 @@ It does not:
 - Represent any proprietary system
 - contain internal validation infrastructure
 - depend on confidential production data
-
----
-
-## Summary
-
-This project explores how system validation workflows can be combined with observability-driven debugging and optional LLM-assisted analysis to improve failure understanding in server systems.
